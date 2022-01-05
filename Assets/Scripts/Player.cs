@@ -9,12 +9,13 @@ public class Player : Character
     private Quaternion playerRot;
     private bool isMoving = false;
     public bool targetIsEnemy = false;
-    private float attackDamage = 5.0f;
+    private float attackDamage = 0.0f;
     private float attackSpeed = 2.0f;
     public GameObject avatar;
     private Animator anim;
     private BoxCollider playerCollider;
     private Creature targetObject;
+    public float lifePoints = 20.0f;
 
     public override void Attack()
     {
@@ -53,9 +54,19 @@ public class Player : Character
             anim.SetBool("isInRange", true);
         }
 
+        if (!targetIsEnemy)
+        {
+            anim.SetBool("isInRange", false);
+        }
+
         if (isMoving)
         {
             Move();
+        }
+
+        if (lifePoints < 0)
+        {
+            Die();
         }
     }
 
@@ -79,15 +90,24 @@ public class Player : Character
         if (Physics.Raycast(ray, out RaycastHit hit, 1000))
         {
             target = hit.point;
-            hit.transform.gameObject.TryGetComponent(out targetObject);
             Vector3 lookAtTarget = new Vector3(target.x - transform.position.x, 0.0f, target.z - transform.position.z);
             playerRot = Quaternion.LookRotation(lookAtTarget);
 
             if (hit.collider.gameObject.CompareTag("Enemy"))
             {
                 targetIsEnemy = true;
+                hit.transform.gameObject.TryGetComponent(out targetObject);
+                if (Vector3.Distance(transform.position, target) < 1.5f)
+                {
+                    transform.LookAt(new Vector3(target.x, 0.0f, target.z));
+                }
             }
             isMoving = true;
         }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
