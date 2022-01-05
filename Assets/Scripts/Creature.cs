@@ -4,69 +4,51 @@ using UnityEngine;
 
 public class Creature : Character
 {
-    public float lifePoints = 15.0f;
-    private float attackDamage = 0.0f;
-    private float speed = 1.0f;
     private Player player;
-    private Animator anim;
-
-    public override void Attack()
-    {
-        player.lifePoints -= attackDamage;
-        transform.LookAt(new Vector3(player.transform.position.x, 0.0f, player.transform.position.z));
-    }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if (lifePoints <= 0)
-        {
-            Die();
-        }
-
-        if (player.lifePoints < 0)
+        base.Update();
+        if (player.LifePoints < 0)
         {
             CancelInvoke();
             anim.SetBool("isInRange", false);
         }
-        else if (Vector3.Distance(transform.position, player.transform.position) < 10.0f
+        
+        if (Vector3.Distance(transform.position, player.transform.position) < 10.0f
             && Vector3.Distance(transform.position, player.transform.position) >= 1.0f)
         {
             CancelInvoke();
             anim.SetBool("isInRange", false);
-            Move();
+            isMoving = true;
+            
         }
         else if (Vector3.Distance(transform.position, player.transform.position) <= 1.0f)
         {
             anim.SetBool("isMoving", false);
             if (!anim.GetBool("isInRange"))
             {
-                InvokeRepeating("Attack", anim.GetCurrentAnimatorStateInfo(0).length, anim.GetCurrentAnimatorStateInfo(0).length);
+                InvokeRepeating("DealDamage", anim.GetCurrentAnimatorStateInfo(0).length, anim.GetCurrentAnimatorStateInfo(0).length);
             }
             anim.SetBool("isInRange", true);
         }
+
+        if (isMoving)
+        {
+            Move(player.transform.position, Quaternion.LookRotation(player.transform.position - transform.position).normalized);
+        }
     }
 
-    private void Die()
+    private void DealDamage()
     {
-        FindObjectOfType<Player>().targetIsEnemy = false;
-        Destroy(gameObject);
+        Attack(player);
     }
-
-    public override void Move()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-        Vector3 direction = (player.transform.position - transform.position).normalized;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5.0f);
-        anim.SetBool("isMoving", true);
-    }
-
 }

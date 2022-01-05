@@ -4,41 +4,22 @@ using UnityEngine;
 
 public class Player : Character
 {
-    private readonly float speed = 5.0f;
     private Vector3 target;
     private Quaternion playerRot;
-    private bool isMoving = false;
     public bool targetIsEnemy = false;
-    private float attackDamage = 0.0f;
-    private float attackSpeed = 2.0f;
-    public GameObject avatar;
-    private Animator anim;
-    private BoxCollider playerCollider;
     private Creature targetObject;
-    public float lifePoints = 20.0f;
-
-    public override void Attack()
-    {
-        targetObject.lifePoints -= attackDamage;
-        if (targetObject.lifePoints < 0)
-        {
-            CancelInvoke();
-            anim.SetBool("isInRange", false);
-            anim.SetBool("isMoving", false);
-        }
-    }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         target = transform.position;
-        anim = avatar.GetComponent<Animator>();
-        playerCollider = avatar.GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         if (Input.GetMouseButton(1))
         {
             SetTargetPosition();
@@ -49,7 +30,7 @@ public class Player : Character
             isMoving = false;
             if (!anim.GetBool("isInRange"))
             {
-                InvokeRepeating("Attack", anim.GetCurrentAnimatorStateInfo(0).length, anim.GetCurrentAnimatorStateInfo(0).length);
+                InvokeRepeating("DealDamage", anim.GetCurrentAnimatorStateInfo(0).length, anim.GetCurrentAnimatorStateInfo(0).length);
             }
             anim.SetBool("isInRange", true);
         }
@@ -57,29 +38,13 @@ public class Player : Character
         if (!targetIsEnemy)
         {
             anim.SetBool("isInRange", false);
+            CancelInvoke();
         }
 
         if (isMoving)
         {
-            Move();
+            Move(target, playerRot);
         }
-
-        if (lifePoints < 0)
-        {
-            Die();
-        }
-    }
-
-    public override void Move()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(target.x, transform.position.y, target.z), Time.deltaTime * speed);
-        transform.rotation = Quaternion.Slerp(transform.rotation, playerRot, Time.deltaTime * speed);
-
-        if (Mathf.Abs(Vector3.Distance(transform.position, target)) < 0.5f)
-        {
-            isMoving = false;
-        }
-        anim.SetBool("isMoving", isMoving);
     }
 
     private void SetTargetPosition()
@@ -106,8 +71,8 @@ public class Player : Character
         }
     }
 
-    private void Die()
+    private void DealDamage()
     {
-        Destroy(gameObject);
+        Attack(targetObject);
     }
 }
