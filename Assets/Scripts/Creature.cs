@@ -25,8 +25,9 @@ public class Creature : Character
         base.Update();
 
         // Start moving towards the player if he is in a certain range
+        // Make sure that the max distance specified here ist the opposite of the distance specified in the Move method of Character!!!
         if (Vector3.Distance(transform.position, player.transform.position) < 10.0f
-            && Vector3.Distance(transform.position, player.transform.position) >= 1.0f)
+            && Vector3.Distance(transform.position, player.transform.position) >= 1.5f)
         {
             CancelInvoke();
             anim.SetBool("isInRange", false);
@@ -38,13 +39,10 @@ public class Creature : Character
             Move(player.transform.position, Quaternion.LookRotation(player.transform.position - transform.position).normalized);
         }
 
-        if (!isMoving)
+        if (!isMoving && !anim.GetBool("isInRange"))
         {
-            if (!anim.GetBool("isInRange"))
-            {
-                InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length);
-                anim.SetBool("isInRange", true);
-            }
+            InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length * 1.5f);
+            anim.SetBool("isInRange", true);
         }
 
         // Toggle the target indicator

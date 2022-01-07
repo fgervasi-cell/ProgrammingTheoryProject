@@ -73,7 +73,7 @@ public class Character : MonoBehaviour
             }
         }
     }
-    private float attackDamage = 0.0f;
+    private float attackDamage = 5.0f;
     public float AttackDamage
     {
         get

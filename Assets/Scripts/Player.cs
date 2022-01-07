@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Represents a player character.
@@ -19,6 +20,8 @@ public class Player : Character
         base.Start();
         // Set the target so it is not null
         target = transform.position;
+        LifePoints = 100.0f;
+        AttackDamage = 15.0f;
     }
 
     // Update is called once per frame
@@ -35,14 +38,11 @@ public class Player : Character
             SetTargetPosition();
         }
 
-        if (targetIsEnemy && !isMoving && targetObject != null)
+        if (targetIsEnemy && !isMoving && targetObject != null && !anim.GetBool("isInRange"))
         {
-            if (!anim.GetBool("isInRange"))
-            {
-                InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length);
-                transform.LookAt(targetObject.transform);
-                anim.SetBool("isInRange", true);
-            }
+            InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length * 1.5f);
+            transform.LookAt(targetObject.transform);
+            anim.SetBool("isInRange", true);
         }
 
         if (isMoving)
