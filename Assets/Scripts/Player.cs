@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents a player character.
+/// Contains the logic for the player controls.
+/// </summary>
 public class Player : Character
 {
     private Vector3 target;
@@ -13,6 +17,7 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
+        // Set the target so it is not null
         target = transform.position;
     }
 
@@ -20,25 +25,24 @@ public class Player : Character
     protected override void Update()
     {
         base.Update();
+
+        // Prevent weird behavior/clipping of the player character when it tries to attack
+        transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+
+        // If the right mouse button is clicked set a new target
         if (Input.GetMouseButton(1))
         {
             SetTargetPosition();
         }
 
-        if (Vector3.Distance(transform.position, target) < 1.5f && targetIsEnemy)
+        if (targetIsEnemy && !isMoving && targetObject != null)
         {
-            isMoving = false;
             if (!anim.GetBool("isInRange"))
             {
-                InvokeRepeating("DealDamage", anim.GetCurrentAnimatorStateInfo(0).length, anim.GetCurrentAnimatorStateInfo(0).length);
+                InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length);
+                transform.LookAt(targetObject.transform);
+                anim.SetBool("isInRange", true);
             }
-            anim.SetBool("isInRange", true);
-        }
-
-        if (!targetIsEnemy)
-        {
-            anim.SetBool("isInRange", false);
-            CancelInvoke();
         }
 
         if (isMoving)
@@ -47,10 +51,12 @@ public class Player : Character
         }
     }
 
+    /// <summary>
+    /// Responsible for determining the position where the player should move and if this target is an enemy object or not.
+    /// </summary>
     private void SetTargetPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        targetIsEnemy = false;
 
         if (Physics.Raycast(ray, out RaycastHit hit, 1000))
         {
@@ -58,19 +64,27 @@ public class Player : Character
             Vector3 lookAtTarget = new Vector3(target.x - transform.position.x, 0.0f, target.z - transform.position.z);
             playerRot = Quaternion.LookRotation(lookAtTarget);
 
-            if (hit.collider.gameObject.CompareTag("Enemy"))
+            if (hit.transform.gameObject.CompareTag("Enemy"))
             {
                 targetIsEnemy = true;
                 hit.transform.gameObject.TryGetComponent(out targetObject);
-                if (Vector3.Distance(transform.position, target) < 1.5f)
+                targetObject.isTarget = true;
+            }
+            else
+            {
+                targetIsEnemy = false;
+                anim.SetBool("isInRange", false);
+                CancelInvoke();
+                if (targetObject != null)
                 {
-                    transform.LookAt(new Vector3(target.x, 0.0f, target.z));
+                    targetObject.isTarget = false;
                 }
             }
             isMoving = true;
         }
     }
 
+    // This is only a workaround because it is not possible to use InvokeRepeating for methods with one or more arguments
     private void DealDamage()
     {
         Attack(targetObject);

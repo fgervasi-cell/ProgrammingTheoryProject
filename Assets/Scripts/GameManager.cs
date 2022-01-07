@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private Player player;
+    [SerializeField]
+    private Texture2D cursorTexture;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
     }
 
     // Update is called once per frame
     void Update()
     {
-       /* if (player.LifePoints < 0.0f)
-        {
-            Time.timeScale = 0;
-        }*/
+        
     }
 }
