@@ -98,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 3099463759358926388}
   targetIsEnemy: 0
+  waypointIndicator: {fileID: 0}
 --- !u!54 &638134352302723693
 Rigidbody:
   m_ObjectHideFlags: 0

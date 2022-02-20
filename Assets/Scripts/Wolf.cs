@@ -9,6 +9,7 @@ public class Wolf : Creature
     {
         base.Start();
         MoveSpeed = 3.0f;
-        AttackDamage = 0.1f;
+        AttackDamage = 5.0f;
+        Points = 5.0f;
     }
 }

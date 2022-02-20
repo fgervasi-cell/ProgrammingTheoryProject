@@ -83,7 +83,7 @@ public class Character : MonoBehaviour
 
         set
         {
-            if (value > 0.0f)
+            if (value >= 0.0f)
             {
                 attackDamage = value;
             }
@@ -101,7 +101,7 @@ public class Character : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (lifePoints < 0)
+        if (lifePoints <= 0)
         {
             Die();
         }
@@ -115,13 +115,14 @@ public class Character : MonoBehaviour
     /// <param name="character">The Gameobject of type Character that should be attacked.</param>
     protected void Attack(Character character)
     {
-        if (character == null || character.LifePoints < 0)
+        character.lifePoints -= attackDamage;
+        Vector3 rotation = new Vector3(character.transform.position.x - transform.position.x, 0.0f, character.transform.position.z - transform.position.z);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rotation), 100.0f * Time.deltaTime);
+        if (character == null || character.LifePoints <= 0)
         {
-            CancelInvoke();
             anim.SetBool("isInRange", false);
             return;
         }
-        character.lifePoints -= attackDamage;
     }
 
     /// <summary>
@@ -131,9 +132,9 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="rotation">The rotation which should be performed while moving.</param>
     /// <param name="target">The target to move to.</param>
-    protected void Move(Vector3 target, Quaternion rotation)
+    protected void Move(Vector3 target, Quaternion rotation, float precision)
     {
-        if (Mathf.Abs(Vector3.Distance(transform.position, target)) < 1.5f)
+        if (Mathf.Abs(Vector3.Distance(transform.position, target)) <= precision)
         {
             isMoving = false;
             anim.SetBool("isMoving", false);
@@ -157,7 +158,12 @@ public class Character : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
+        if (GetComponent<Collider>() != null)
+        {
+            GetComponent<Collider>().enabled = false;
+        }
+        this.enabled = false;
     }
 }

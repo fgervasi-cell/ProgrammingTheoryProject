@@ -13,6 +13,29 @@ public class Player : Character
     private Quaternion playerRot;
     public bool targetIsEnemy = false;
     private Creature targetObject;
+    private float score = 0.0f;
+    private float movePrecision = 0.1f;
+    private float nextAttack = 0.0f;
+    public GameObject waypointIndicator;
+    public float Score
+    {
+        get
+        {
+            return score;
+        }
+
+        set
+        {
+            if (value > score)
+            {
+                score = value;
+            }
+            else
+            {
+                Debug.LogWarning("Can only increment score!");
+            }
+        }
+    }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -38,16 +61,24 @@ public class Player : Character
             SetTargetPosition();
         }
 
-        if (targetIsEnemy && !isMoving && targetObject != null && !anim.GetBool("isInRange"))
+        if (targetIsEnemy && !isMoving && targetObject != null && targetObject.LifePoints > 0.0f)
         {
-            InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length * 1.5f);
-            transform.LookAt(targetObject.transform);
             anim.SetBool("isInRange", true);
+            if (Time.time >= nextAttack)
+            {
+                Debug.Log("Attack!");
+                Attack(targetObject);
+                nextAttack = Time.time + anim.GetCurrentAnimatorStateInfo(0).length;
+            }
         }
 
         if (isMoving)
         {
-            Move(target, playerRot);
+            Move(target, playerRot, movePrecision);
+        }
+        else
+        {
+            waypointIndicator.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
@@ -67,26 +98,28 @@ public class Player : Character
             if (hit.transform.gameObject.CompareTag("Enemy"))
             {
                 targetIsEnemy = true;
+                waypointIndicator.GetComponent<MeshRenderer>().enabled = false;
+                movePrecision = 2.0f;
                 hit.transform.gameObject.TryGetComponent(out targetObject);
                 targetObject.isTarget = true;
             }
             else
             {
                 targetIsEnemy = false;
+                movePrecision = 0.1f;
                 anim.SetBool("isInRange", false);
-                CancelInvoke();
                 if (targetObject != null)
                 {
                     targetObject.isTarget = false;
                 }
             }
             isMoving = true;
-        }
-    }
 
-    // This is only a workaround because it is not possible to use InvokeRepeating for methods with one or more arguments
-    private void DealDamage()
-    {
-        Attack(targetObject);
+            if (waypointIndicator != null && !targetIsEnemy)
+            {
+                waypointIndicator.transform.position = new Vector3(hit.point.x, 0.1f, hit.point.z);
+                waypointIndicator.GetComponent<MeshRenderer>().enabled = true;
+            }
+        }
     }
 }

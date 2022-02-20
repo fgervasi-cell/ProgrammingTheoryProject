@@ -11,6 +11,27 @@ public class Creature : Character
     [SerializeField]
     private GameObject targetIndicator;
     public bool isTarget = false;
+    private float nextAttack = 0.0f;
+    private float points = 5.0f;
+    public float Points
+    {
+        get
+        {
+            return points;
+        }
+
+        set
+        {
+            if (value > 0.0f)
+            {
+                points = value;
+            }
+            else
+            {
+                Debug.LogWarning("Points cannot be set to a negative value!");
+            }
+        }
+    }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -26,23 +47,26 @@ public class Creature : Character
 
         // Start moving towards the player if he is in a certain range
         // Make sure that the max distance specified here ist the opposite of the distance specified in the Move method of Character!!!
-        if (Vector3.Distance(transform.position, player.transform.position) < 10.0f
-            && Vector3.Distance(transform.position, player.transform.position) >= 1.5f)
+        if (Vector3.Distance(transform.position, player.transform.position) < 10.0f && Vector3.Distance(transform.position, player.transform.position) > 1.0f)
         {
-            CancelInvoke();
-            anim.SetBool("isInRange", false);
             isMoving = true;
-        }
-
-        if (isMoving)
+            anim.SetBool("isInRange", false);
+            Move(player.transform.position, Quaternion.LookRotation(player.transform.position - transform.position).normalized, 1.0f);
+        } 
+        else if (Vector3.Distance(transform.position, player.transform.position) <= 1.0f && player.enabled)
         {
-            Move(player.transform.position, Quaternion.LookRotation(player.transform.position - transform.position).normalized);
-        }
-
-        if (!isMoving && !anim.GetBool("isInRange"))
-        {
-            InvokeRepeating("DealDamage", 0.0f, anim.GetCurrentAnimatorStateInfo(0).length * 1.5f);
             anim.SetBool("isInRange", true);
+            if (Time.time >= nextAttack)
+            {
+                Attack(player);
+                nextAttack = Time.time + anim.GetCurrentAnimatorStateInfo(0).length;
+            }
+            
+        }
+        else
+        {
+            isMoving = false;
+            anim.SetBool("isMoving", false);
         }
 
         // Toggle the target indicator
@@ -54,10 +78,5 @@ public class Creature : Character
         {
             targetIndicator.GetComponent<MeshRenderer>().enabled = false;
         }
-    }
-
-    private void DealDamage()
-    {
-        Attack(player);
     }
 }
