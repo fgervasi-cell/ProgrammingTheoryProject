@@ -51,8 +51,10 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < treeCount; i++)
         {
-            int index = Random.Range(0, creatures.Length - 1);
-            Instantiate(trees[index], DetermineSpawnCoordinates(min, max, 50.0f), Quaternion.identity, GameObject.Find("Environment").transform);
+            int index = Random.Range(0, trees.Length);
+            GameObject tree = trees[index];
+            tree.transform.localScale = Vector3.one * Random.Range(0.2f, 0.5f);
+            Instantiate(tree, DetermineSpawnCoordinates(min, max, 0.0f), RandomQuaternion(), GameObject.Find("Environment").transform);
         }
     }
 
@@ -60,24 +62,30 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < creaturesCount; i++)
         {
-            int index = Random.Range(0, creatures.Length - 1);
+            int index = Random.Range(0, creatures.Length);
             Instantiate(creatures[index], DetermineSpawnCoordinates(min, max, 5.0f), Quaternion.identity, GameObject.Find("Creatures").transform);
         }
     }
 
     private Vector3 DetermineSpawnCoordinates(float min, float max, float radius)
     {
-        bool isFreeSpace = false;
-        while (!isFreeSpace)
+        while (true)
         {
             float spawnX = Random.Range(min, max);
             float spawnZ = Random.Range(min, max);
-            isFreeSpace = !Physics.CheckSphere(new Vector3(spawnX, 1.0f, spawnZ), radius, 6);
+            bool isFreeSpace = !Physics.CheckSphere(new Vector3(spawnX, 1.0f, spawnZ), radius, 6);
             if (isFreeSpace)
             {
                 return new Vector3(spawnX, 0.0f, spawnZ);
             }
         }
-        return Vector3.zero;
+    }
+
+    private Quaternion RandomQuaternion()
+    {
+        float x = Random.Range(0, 1);
+        float y = Random.Range(0, 1);
+        float z = Random.Range(0, 1);
+        return new Quaternion(x, y, z, 1);
     }
 }
