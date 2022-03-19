@@ -10,8 +10,11 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     protected Animator anim;
-    [SerializeField]
-    private GameObject avatar;
+    [SerializeField] private GameObject avatar;
+    [SerializeField] private AudioClip dyingSound;
+    [SerializeField] private AudioClip attackSound;
+    [SerializeField] private AudioClip walkingSound;
+    protected AudioSource audioSrc;
     protected bool isMoving = false;
     private float moveSpeed = 5.0f;
     public float MoveSpeed
@@ -115,6 +118,7 @@ public class Character : MonoBehaviour
     /// <param name="character">The Gameobject of type Character that should be attacked.</param>
     protected void Attack(Character character)
     {
+        audioSrc.PlayOneShot(attackSound, 1);
         character.lifePoints -= attackDamage;
         Vector3 rotation = new Vector3(character.transform.position.x - transform.position.x, 0.0f, character.transform.position.z - transform.position.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rotation), 100.0f * Time.deltaTime);
@@ -136,11 +140,17 @@ public class Character : MonoBehaviour
     {
         if (Mathf.Abs(Vector3.Distance(transform.position, target)) <= precision)
         {
+            audioSrc.Stop();
             isMoving = false;
             anim.SetBool("isMoving", false);
             return;
         }
-
+        if (!audioSrc.isPlaying)
+        {
+            audioSrc.loop = true;
+            audioSrc.clip = walkingSound;
+            audioSrc.Play();
+        }
         transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
         anim.SetBool("isMoving", true);
@@ -152,6 +162,7 @@ public class Character : MonoBehaviour
     /// </summary>
     private void Die()
     {
+        audioSrc.PlayOneShot(dyingSound);
         if (anim.isHuman)
         {
             anim.SetBool("isDead", true);
@@ -162,7 +173,7 @@ public class Character : MonoBehaviour
         }
         if (GetComponent<Collider>() != null)
         {
-            GetComponent<Collider>().enabled = false;
+        GetComponent<Collider>().enabled = false;
         }
         this.enabled = false;
     }

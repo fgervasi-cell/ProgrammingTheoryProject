@@ -41,11 +41,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9a30499e47789df48aa9bdb1ec7b0982, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -225,6 +225,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatar: {fileID: 3099463759358926388}
+  dyingSound: {fileID: 8300000, guid: d9480da25121f624a85ac31d96ccd0dd, type: 3}
+  attackSound: {fileID: 8300000, guid: 80151380c0f818243b66a78ef69c9fcd, type: 3}
+  walkingSound: {fileID: 8300000, guid: 9a30499e47789df48aa9bdb1ec7b0982, type: 3}
   targetIsEnemy: 0
   waypointIndicator: {fileID: 0}
 --- !u!54 &638134352302723693

@@ -17,7 +17,6 @@ public class Player : Character
     private float movePrecision = 0.1f;
     private float nextAttack = 0.0f;
     public GameObject waypointIndicator;
-    private AudioSource playerAudio;
     public float Score
     {
         get
@@ -46,7 +45,7 @@ public class Player : Character
         target = transform.position;
         LifePoints = 100.0f;
         AttackDamage = 15.0f;
-        playerAudio = GameObject.Find("PlayerAudio").GetComponent<AudioSource>();
+        audioSrc = GameObject.Find("PlayerAudio").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -76,15 +75,10 @@ public class Player : Character
 
         if (isMoving)
         {
-            if (!playerAudio.isPlaying)
-            {
-                playerAudio.Play();
-            }
             Move(target, playerRot, movePrecision);
         }
         else
         {
-            playerAudio.Stop();
             waypointIndicator.GetComponent<MeshRenderer>().enabled = false;
         }
     }
