@@ -49,11 +49,14 @@ public class Creature : Character
         // Make sure that the max distance specified here ist the opposite of the distance specified in the Move method of Character!!!
         if (Vector3.Distance(transform.position, player.transform.position) < 10.0f && Vector3.Distance(transform.position, player.transform.position) > 1.0f)
         {
-            isMoving = true;
-            anim.SetBool("isInRange", false);
             Move(player.transform.position, Quaternion.LookRotation(player.transform.position - transform.position).normalized, 1.0f);
-        } 
-        else if (Vector3.Distance(transform.position, player.transform.position) <= 1.0f && player.enabled)
+        }
+        else
+        {
+            anim.SetBool("isMoving", false);
+        }
+        
+        if (Vector3.Distance(transform.position, player.transform.position) <= 1.0f && player.enabled)
         {
             anim.SetBool("isInRange", true);
             if (Time.time >= nextAttack)
@@ -61,12 +64,10 @@ public class Creature : Character
                 Attack(player);
                 nextAttack = Time.time + anim.GetCurrentAnimatorStateInfo(0).length;
             }
-            
         }
         else
         {
-            isMoving = false;
-            anim.SetBool("isMoving", false);
+            anim.SetBool("isInRange", false);
         }
 
         // Toggle the target indicator

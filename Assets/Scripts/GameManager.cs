@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] trees;
     [SerializeField] private GameObject[] creatures;
     [SerializeField] private GameObject[] grass;
+    [SerializeField] private GameObject healthPotion;
     [SerializeField] private LayerMask layerMask;
     private Text scoreText;
     private GameObject plane;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
         SpawnTrees(min, max);
         SpawnCreatures(min, max);
         SpawnGrass(min, max);
+        SpawnHealth(min, max);
     }
 
     private void SpawnTrees(float min, float max)
@@ -71,6 +73,21 @@ public class GameManager : MonoBehaviour
             int index = Random.Range(0, grass.Length);
             Instantiate(grass[index], DetermineSpawnCoordinates(min, max, 0.0f), RandomQuaternion(), GameObject.Find("Grass").transform);
         }
+    }
+
+    private void SpawnHealth(float min, float max)
+    {
+        int numberOfHealthPotions = Random.Range(1, 3);
+        for (int i = 0; i < numberOfHealthPotions; i++)
+        {
+            Instantiate(healthPotion, DetermineSpawnCoordinates(min, max, 0.5f, 0.25f), healthPotion.transform.rotation, GameObject.Find("Pickups").transform);
+        }
+    }
+
+    private Vector3 DetermineSpawnCoordinates(float min, float max, float radius, float yComponent)
+    {
+        Vector3 vector = DetermineSpawnCoordinates(min, max, radius);
+        return new Vector3(vector.x, yComponent, vector.z);
     }
 
     private Vector3 DetermineSpawnCoordinates(float min, float max, float radius)

@@ -7,6 +7,7 @@ using UnityEngine;
 /// It provides all necessary utilities to move a character and let it attack.
 /// The "isMoving" variable should be used to specify when a character is able to move and when not.
 /// </summary>
+[RequireComponent(typeof(AudioSource))]
 public class Character : MonoBehaviour
 {
     protected Animator anim;
@@ -100,6 +101,7 @@ public class Character : MonoBehaviour
     protected virtual void Start()
     {
         anim = avatar.GetComponent<Animator>();
+        audioSrc = GetComponent<AudioSource>();
     }
 
     protected virtual void Update()
@@ -118,7 +120,10 @@ public class Character : MonoBehaviour
     /// <param name="character">The Gameobject of type Character that should be attacked.</param>
     protected void Attack(Character character)
     {
-        audioSrc.PlayOneShot(attackSound, 1);
+        if (!audioSrc.isPlaying)
+        {
+            audioSrc.PlayOneShot(attackSound);
+        }
         character.lifePoints -= attackDamage;
         Vector3 rotation = new Vector3(character.transform.position.x - transform.position.x, 0.0f, character.transform.position.z - transform.position.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rotation), 100.0f * Time.deltaTime);

@@ -45,7 +45,6 @@ public class Player : Character
         target = transform.position;
         LifePoints = 100.0f;
         AttackDamage = 15.0f;
-        audioSrc = GameObject.Find("PlayerAudio").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -69,6 +68,10 @@ public class Player : Character
             {
                 Debug.Log("Attack!");
                 Attack(targetObject);
+                if (targetObject.LifePoints <= 0)
+                {
+                    Score += targetObject.Points;
+                }
                 nextAttack = Time.time + anim.GetCurrentAnimatorStateInfo(0).length;
             }
         }
