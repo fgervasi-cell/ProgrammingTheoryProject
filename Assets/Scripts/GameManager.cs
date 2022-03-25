@@ -11,11 +11,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int treeCount;
     [SerializeField] private int creaturesCount;
     [SerializeField] private int grassCount;
+    [SerializeField] private int numberOfAbilities;
     [SerializeField] private GameObject[] trees;
     [SerializeField] private GameObject[] creatures;
     [SerializeField] private GameObject[] grass;
     [SerializeField] private GameObject healthPotion;
+    [SerializeField] private GameObject abilityPrefab;
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private Sprite[] abilityTextures;
+    [SerializeField] private Image[] playerAbilities;
+    public static Sprite[] staticAbilityTextures;
+    public static Image[] staticPlayerAbilities;
     private Text scoreText;
     private GameObject plane;
 
@@ -25,6 +31,8 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
         plane = GameObject.FindGameObjectWithTag("Ground");
         scoreText = GameObject.Find("Score").GetComponent<Text>();
+        staticAbilityTextures = abilityTextures;
+        staticPlayerAbilities = playerAbilities;
         SpawnObjectsOnPlane();
     }
 
@@ -44,6 +52,7 @@ public class GameManager : MonoBehaviour
         SpawnCreatures(min, max);
         SpawnGrass(min, max);
         SpawnHealth(min, max);
+        SpawnAbilities(min, max);
     }
 
     private void SpawnTrees(float min, float max)
@@ -81,6 +90,14 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < numberOfHealthPotions; i++)
         {
             Instantiate(healthPotion, DetermineSpawnCoordinates(min, max, 0.5f, 0.25f), healthPotion.transform.rotation, GameObject.Find("Pickups").transform);
+        }
+    }
+
+    private void SpawnAbilities(float min, float max)
+    {
+        for (int i = 0; i < numberOfAbilities; i++)
+        {
+            Instantiate(abilityPrefab, DetermineSpawnCoordinates(min, max, 0.5f, 0.25f), abilityPrefab.transform.rotation, GameObject.Find("Pickups").transform);
         }
     }
 

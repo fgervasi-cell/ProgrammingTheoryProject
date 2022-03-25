@@ -9,6 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class Player : Character
 {
+    public List<Ability> abilities = new List<Ability>();
     private Vector3 target;
     private Quaternion playerRot;
     public bool targetIsEnemy = false;
