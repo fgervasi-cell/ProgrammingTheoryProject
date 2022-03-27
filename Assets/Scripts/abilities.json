@@ -1,0 +1,25 @@
+{
+	"Items": [
+		{
+			"name": "Fire Crunch",
+			"description": "A devastating blast of fire that will scorch your enemies.",
+			"cooldown": 10,
+			"damage": 50,
+			"imgPath": "Assets/Blink/Art/Icons/Classes/Elementalist/Pyromancer/Pyromancer7.png"
+		},
+		{
+			"name": "Electricity Shock",
+			"description": "A terrifying electromagnetic shock that paralyzes enemies.",
+			"cooldown": 15,
+			"damage": 55,
+			"imgPath": "Assets/Blink/Art/Icons/Classes/Elementalist/Electromancer/Electromancer3.png"
+		},
+		{
+			"name": "Cryo Splice",
+			"description": "Slow down your opponents with an ice cold attack.",
+			"cooldown": 6,
+			"damage": 30,
+			"imgPath": "Assets/Blink/Art/Icons/Classes/Elementalist/Cryomancer/Cryomancer4.png"
+		}
+	]
+}

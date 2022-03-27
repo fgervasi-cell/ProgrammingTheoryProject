@@ -85,6 +85,19 @@ public class Player : Character
         {
             waypointIndicator.GetComponent<MeshRenderer>().enabled = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            UseAbility(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            UseAbility(1);
+        }
+        else
+        {
+            UseAbility(2);
+        }
     }
 
     /// <summary>
@@ -124,6 +137,17 @@ public class Player : Character
             {
                 waypointIndicator.transform.position = new Vector3(hit.point.x, 0.1f, hit.point.z);
                 waypointIndicator.GetComponent<MeshRenderer>().enabled = true;
+            }
+        }
+    }
+
+    void UseAbility(int abilityIndex)
+    {
+        for (int i = 0; i < abilities.Count - 1; i++)
+        {
+            if (i == abilityIndex)
+            {
+                break;
             }
         }
     }

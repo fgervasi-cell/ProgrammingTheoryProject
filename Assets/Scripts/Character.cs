@@ -13,8 +13,8 @@ public class Character : MonoBehaviour
     protected Animator anim;
     [SerializeField] private GameObject avatar;
     [SerializeField] private AudioClip dyingSound;
-    [SerializeField] private AudioClip attackSound;
-    [SerializeField] private AudioClip walkingSound;
+    [SerializeField] private AudioClip[] attackSound;
+    [SerializeField] private AudioClip[] walkingSound;
     protected AudioSource audioSrc;
     protected bool isMoving = false;
     private float moveSpeed = 5.0f;
@@ -122,7 +122,7 @@ public class Character : MonoBehaviour
     {
         if (!audioSrc.isPlaying)
         {
-            audioSrc.PlayOneShot(attackSound);
+            audioSrc.PlayOneShot(attackSound[Random.Range(0, attackSound.Length)]);
         }
         character.lifePoints -= attackDamage;
         Vector3 rotation = new Vector3(character.transform.position.x - transform.position.x, 0.0f, character.transform.position.z - transform.position.z);
@@ -152,9 +152,7 @@ public class Character : MonoBehaviour
         }
         if (!audioSrc.isPlaying)
         {
-            audioSrc.loop = true;
-            audioSrc.clip = walkingSound;
-            audioSrc.Play();
+            audioSrc.PlayOneShot(walkingSound[Random.Range(0, walkingSound.Length)]);
         }
         transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);

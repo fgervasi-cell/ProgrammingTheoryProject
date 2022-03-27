@@ -217,7 +217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501704f0fd7f62743a95f8ee61ae9564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupSound: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
+  pickupSound: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
+  image: {fileID: 0}
+  description: 
+  abilityName: 
+  cooldown: 0
+  damage: 0
 --- !u!135 &2847489557626398691
 SphereCollider:
   m_ObjectHideFlags: 0

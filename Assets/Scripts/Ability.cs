@@ -1,34 +1,62 @@
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEditor;
 
 public class Ability : Pickup
 {
     private Player player;
-    private int cooldown;
-    private Sprite image;
+    public Sprite image;
+    public string description;
+    public string abilityName;
+    public int cooldown;
+    public int damage;
+    private GameObject infoBoard;
 
     protected override void Start()
     {
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        cooldown = Random.Range(10, 20);
-        image = GameManager.staticAbilityTextures[Random.Range(0, GameManager.staticAbilityTextures.Length)];
+        infoBoard = GameObject.Find("InfoBoard");
+    }
+
+    public void SetImage(string path)
+    {
+        image = AssetDatabase.LoadAssetAtPath<Sprite>(path);
     }
 
     protected override void ReleaseEffect()
     {
-        if (player.abilities.Count < 3)
+        player.abilities.Add(this);
+        for (int i = 0; i < GameManager.playerAbilityPlaceholders.Length; i++)
         {
-            player.abilities.Add(this);
-            for (int i = 0; i < GameManager.staticPlayerAbilities.Length; i++)
+            if (!GameManager.playerAbilityPlaceholders[i].GetComponent<Image>().sprite && player.abilities.Count <= 3)
             {
-                if (!GameManager.staticPlayerAbilities[i].GetComponent<Image>().sprite)
-                {
-                    GameManager.staticPlayerAbilities[i].GetComponent<Image>().sprite = image;
-                    GameManager.staticPlayerAbilities[i].GetComponent<Image>().color = new Color(255, 255, 255, 255);
-                    break;
-                }
+                GameManager.playerAbilityPlaceholders[i].GetComponent<Image>().sprite = image;
+                GameManager.playerAbilityPlaceholders[i].GetComponent<Image>().color = new Color(255, 255, 255, 255);
+                break;
             }
         }
+        ShowInfoBoard();
+    }
+
+    private void ShowInfoBoard()
+    {
+        var rectTransform = infoBoard.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector2(0, 0);
+        Text[] textComponents = infoBoard.GetComponentsInChildren<Text>();
+        textComponents[0].text = description;
+        textComponents[1].text = abilityName;
+        textComponents[2].text = "Cooldown: " + cooldown;
+        textComponents[3].text = "Damage: " + damage;
+    }
+
+    [System.Serializable]
+    public class AbilityData
+    {
+        public string name;
+        public string description;
+        public string imgPath;
+        public int cooldown;
+        public int damage;
     }
 }
