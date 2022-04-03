@@ -80,7 +80,7 @@ public class SpawnManager : MonoBehaviour
         {
             Ability.AbilityData abilityData = GameManager.playerAbilities[Random.Range(0, GameManager.playerAbilities.Length)];
             Ability ability = abilityPrefab.GetComponent<Ability>();
-            ability.SetImage(abilityData.imgPath);
+            ability.SetImage(abilityData.imgIndex);
             ability.description = abilityData.description;
             ability.abilityName = abilityData.name;
             ability.cooldown = abilityData.cooldown;

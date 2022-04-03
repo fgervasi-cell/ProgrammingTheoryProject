@@ -13,6 +13,7 @@ public class ExchangeDialog : MonoBehaviour
     void Start()
     {
         abilityButtons = GameObject.FindGameObjectsWithTag("AbilityButton");
+        Utility.SortArrayByObjectNameEnding(abilityButtons);
         for (int i = 0; i < abilityButtons.Length; i++)
         {
             int x = i;
@@ -22,6 +23,7 @@ public class ExchangeDialog : MonoBehaviour
         buttons[buttons.Length - 2].onClick.AddListener(Cancel);
         buttons[buttons.Length - 1].onClick.AddListener(Accept);
         borders = GameObject.FindGameObjectsWithTag("AbilityBorder");
+        Utility.SortArrayByObjectNameEnding(borders);
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 

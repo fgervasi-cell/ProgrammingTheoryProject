@@ -9,7 +9,7 @@ public class InfoBoard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Button cancelButton = GameObject.Find("CheckButton").GetComponent<Button>();
+        Button cancelButton = GameObject.Find("InfoBoardCheckButton").GetComponent<Button>();
         cancelButton.onClick.AddListener(CloseInfoBoard);
         player = GameObject.Find("Player").GetComponent<Player>();
     }

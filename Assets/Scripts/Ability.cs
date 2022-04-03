@@ -19,9 +19,9 @@ public class Ability : Pickup
         infoBoard = GameObject.Find("InfoBoard");
     }
 
-    public void SetImage(string path)
+    public void SetImage(int index)
     {
-        image = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        image = GameManager.AbilitySprites[index];
     }
 
     protected override void ReleaseEffect()
@@ -55,7 +55,7 @@ public class Ability : Pickup
     {
         public string name;
         public string description;
-        public string imgPath;
+        public int imgIndex;
         public int cooldown;
         public int damage;
     }

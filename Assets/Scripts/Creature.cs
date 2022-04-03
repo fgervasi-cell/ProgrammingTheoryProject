@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Represents an enemy character which follows and attacks the player if it is in a certain range.
@@ -8,8 +7,9 @@ using UnityEngine;
 public class Creature : Character
 {
     private Player player;
-    [SerializeField]
-    private GameObject targetIndicator;
+    private RectTransform healthBarCanvas;
+    private Transform mainCameraTransform;
+    [SerializeField] private GameObject targetIndicator;
     public bool isTarget = false;
     private float nextAttack = 0.0f;
     private float points = 5.0f;
@@ -38,6 +38,8 @@ public class Creature : Character
     {
         base.Start();
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        healthBarCanvas = Utility.FindGameObjectWithComponentByNameInChildren<RectTransform>(gameObject, "CreatureHealthBarCanvas").GetComponent<RectTransform>();
+        mainCameraTransform = GameObject.Find("Main Camera").transform;
     }
 
     // Update is called once per frame
@@ -79,5 +81,7 @@ public class Creature : Character
         {
             targetIndicator.GetComponent<MeshRenderer>().enabled = false;
         }
+
+        healthBarCanvas.rotation = mainCameraTransform.rotation;
     }
 }

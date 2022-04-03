@@ -41,11 +41,11 @@ public class Player : Character
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
         // Set the target so it is not null
         target = transform.position;
         LifePoints = 100.0f;
         AttackDamage = 15.0f;
+        base.Start();
     }
 
     // Update is called once per frame

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 638134352302723670}
   - component: {fileID: 638134352302723666}
   - component: {fileID: 638134352302723667}
-  - component: {fileID: 638134352302723665}
   - component: {fileID: 638134352302723693}
   - component: {fileID: 2351424754439223936}
+  - component: {fileID: 1390208344}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -85,35 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &638134352302723665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638134352302723671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead6b6c3e75e0764fb84b39a718fcab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  avatar: {fileID: 3099463759358926388}
-  dyingSound: {fileID: 8300000, guid: d9480da25121f624a85ac31d96ccd0dd, type: 3}
-  attackSound:
-  - {fileID: 8300000, guid: 05a3d22edb3d9994db96dd8e853a3011, type: 3}
-  - {fileID: 8300000, guid: 68fbe05e2ac14bf44889a5b4600d26cb, type: 3}
-  - {fileID: 8300000, guid: c5d5ea9d51ccd15459f4c870b33bb147, type: 3}
-  - {fileID: 8300000, guid: 8e790aa15a4b4ac42a98a3c76ae14bbc, type: 3}
-  - {fileID: 8300000, guid: 4fb434acd685bf54e8747e3118c85f95, type: 3}
-  walkingSound:
-  - {fileID: 8300000, guid: 9a30499e47789df48aa9bdb1ec7b0982, type: 3}
-  - {fileID: 8300000, guid: 1d7e7e6569aab5a45a837f470eaddc8b, type: 3}
-  - {fileID: 8300000, guid: 31be579b280d0bc459635877e8c45aee, type: 3}
-  - {fileID: 8300000, guid: d3ea0567dbe95714eb0ca07f43a37a96, type: 3}
-  - {fileID: 8300000, guid: 161d5a427e88d594f9906708ccdc5663, type: 3}
-  abilities: []
-  targetIsEnemy: 0
-  waypointIndicator: {fileID: 0}
 --- !u!54 &638134352302723693
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -226,19 +197,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &467363551029092827
-BoxCollider:
+--- !u!114 &1390208344
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3099463759358926388}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_GameObject: {fileID: 638134352302723671}
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4549836, y: 1.004514, z: 0.29207805}
-  m_Center: {x: 0.012010895, y: 0.38943255, z: -0.025436431}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ead6b6c3e75e0764fb84b39a718fcab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatar: {fileID: 3099463759358926388}
+  dyingSound: {fileID: 8300000, guid: d9480da25121f624a85ac31d96ccd0dd, type: 3}
+  attackSound:
+  - {fileID: 8300000, guid: 05a3d22edb3d9994db96dd8e853a3011, type: 3}
+  - {fileID: 8300000, guid: 68fbe05e2ac14bf44889a5b4600d26cb, type: 3}
+  - {fileID: 8300000, guid: c5d5ea9d51ccd15459f4c870b33bb147, type: 3}
+  - {fileID: 8300000, guid: 8e790aa15a4b4ac42a98a3c76ae14bbc, type: 3}
+  - {fileID: 8300000, guid: 4fb434acd685bf54e8747e3118c85f95, type: 3}
+  walkingSound:
+  - {fileID: 8300000, guid: 9a30499e47789df48aa9bdb1ec7b0982, type: 3}
+  - {fileID: 8300000, guid: 1d7e7e6569aab5a45a837f470eaddc8b, type: 3}
+  - {fileID: 8300000, guid: 31be579b280d0bc459635877e8c45aee, type: 3}
+  - {fileID: 8300000, guid: c3f3efc1106f84643a38bd21f6826aaf, type: 3}
+  - {fileID: 8300000, guid: 2de8329adc6f9b944a5ab0875fb59924, type: 3}
+  healthBar: {fileID: 0}
+  abilities: []
+  targetIsEnemy: 0
+  waypointIndicator: {fileID: 0}
 --- !u!1001 &3099463759358892180
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -607,6 +595,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400112, guid: 1eefae038fcff6a45a6f3f0e9abd557d, type: 3}
   m_PrefabInstance: {fileID: 3099463759358892180}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &467363551029092827
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3099463759358926388}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4549836, y: 1.004514, z: 0.29207805}
+  m_Center: {x: 0.012010895, y: 0.38943255, z: -0.025436431}
 --- !u!1001 &3099463759552325220
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// This class should be used on all humanoid or generic characters in the game.
@@ -15,6 +14,8 @@ public class Character : MonoBehaviour
     [SerializeField] private AudioClip dyingSound;
     [SerializeField] private AudioClip[] attackSound;
     [SerializeField] private AudioClip[] walkingSound;
+    public float maxHealth;
+    public Image healthBar;
     protected AudioSource audioSrc;
     protected bool isMoving = false;
     private float moveSpeed = 5.0f;
@@ -100,6 +101,7 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
+        maxHealth = LifePoints;
         anim = avatar.GetComponent<Animator>();
         audioSrc = GetComponent<AudioSource>();
     }
@@ -125,6 +127,7 @@ public class Character : MonoBehaviour
             audioSrc.PlayOneShot(attackSound[Random.Range(0, attackSound.Length)]);
         }
         character.lifePoints -= attackDamage;
+        character.healthBar.fillAmount = character.LifePoints / character.maxHealth;
         Vector3 rotation = new Vector3(character.transform.position.x - transform.position.x, 0.0f, character.transform.position.z - transform.position.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rotation), 100.0f * Time.deltaTime);
         if (character == null || character.LifePoints <= 0)
